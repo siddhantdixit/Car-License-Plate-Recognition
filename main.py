@@ -255,11 +255,11 @@ class NeuralNetwork:
         self.label_file = "./model/binary_128_0.50_labels_ver2.txt"
         self.label = self.load_label(self.label_file)
         self.graph = self.load_graph(self.model_file)
-        self.sess = tf.Session(graph=self.graph)
+        self.sess = tf.compat.v1.Session(graph=self.graph)
 
     def load_graph(self, modelFile):
         graph = tf.Graph()
-        graph_def = tf.GraphDef()
+        graph_def = tf.compat.v1.GraphDef()
         with open(modelFile, "rb") as f:
             graph_def.ParseFromString(f.read())
         with graph.as_default():
@@ -268,7 +268,7 @@ class NeuralNetwork:
 
     def load_label(self, labelFile):
         label = []
-        proto_as_ascii_lines = tf.gfile.GFile(labelFile).readlines()
+        proto_as_ascii_lines = tf.compat.v2.io.gfile.GFile(labelFile).readlines()
         for l in proto_as_ascii_lines:
             label.append(l.rstrip())
         return label
@@ -313,7 +313,7 @@ if __name__ == "__main__":
     # Initialize the Neural Network
     model = NeuralNetwork()
 
-    cap = cv2.VideoCapture('test_videos/test.MOV')
+    cap = cv2.VideoCapture('test_videos/test.mp4')
     while (cap.isOpened()):
         ret, img = cap.read()
         if ret == True:
